@@ -14,7 +14,7 @@
   .header p { font-size: 14px; opacity: 0.85; }
   .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
 
-  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .kpi-row { display: grid; gap: 16px; margin-bottom: 24px; }
   .kpi-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
   .kpi-card .label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #6b7280; margin-bottom: 8px; font-weight: 600; }
   .kpi-card .value { font-size: 32px; font-weight: 700; color: #1a1a2e; }
@@ -28,7 +28,6 @@
   .chart-card.full { grid-column: 1 / -1; }
   .chart-card h2 { font-size: 16px; font-weight: 600; margin-bottom: 16px; color: #374151; }
 
-  /* Category cards */
   .cat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
   .cat-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border-top: 4px solid; }
   .cat-card .cat-name { font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 12px; line-height: 1.3; }
@@ -49,6 +48,7 @@
   .pos-low { background: #fee2e2; color: #991b1b; }
   .ctr-val { font-weight: 600; }
   .tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; margin-left: 6px; }
+  .source-tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
 
   .callout { background: white; border-radius: 12px; padding: 24px 28px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 24px; border-left: 4px solid #00b894; }
   .callout p { font-size: 15px; color: #374151; line-height: 1.6; }
@@ -66,22 +66,20 @@
 
 <div class="header">
   <h1>Crisis Content Performance Dashboard</h1>
-  <p>blog.wego.com &nbsp;|&nbsp; Google Search Console &nbsp;|&nbsp; 1 – 19 March 2026 &nbsp;|&nbsp; 85 articles published</p>
+  <p>blog.wego.com &nbsp;|&nbsp; Google Search + Google Discover &nbsp;|&nbsp; 1 – 19 March 2026 &nbsp;|&nbsp; 85 articles published</p>
 </div>
 
 <div class="container">
 
-  <!-- Executive summary callout -->
   <div class="callout">
     <p>
       We've published <strong>85 crisis-related articles</strong> covering airline cancellation &amp; rebooking guides, airport status pages, airspace closure reports, alternative routing guides, and traveler support resources.
-      In just 19 days (March 1–19), this content has generated <strong>21,862 clicks</strong> from <strong>3.64 million impressions</strong> on Google Search.
-      Crisis content accounts for <strong>80.5% of all clicks</strong> on the blog, with the strongest performers being airline rebooking guides and live airport status pages.
-      Traffic is heavily mobile (81%) and concentrated in the UK, India, Kuwait, and Pakistan — markets directly affected by the Middle East disruptions.
+      In just 19 days (March 1–19), this content has generated <strong>43,464 clicks</strong> from <strong>4.05 million impressions</strong> across Google Search and Google Discover combined.
+      Google Discover alone contributed <strong>21,602 clicks</strong> — nearly matching Search — with the Kuwait Airways article pulling 13,132 clicks from Discover feeds.
     </p>
   </div>
 
-  <!-- KPI cards -->
+  <!-- KPI cards — combined totals -->
   <div class="kpi-row" style="grid-template-columns: repeat(5, 1fr);">
     <div class="kpi-card highlight">
       <div class="label">Articles Published</div>
@@ -89,87 +87,88 @@
       <div class="sub">Crisis-related content</div>
     </div>
     <div class="kpi-card highlight">
-      <div class="label">Total Clicks</div>
+      <div class="label">Total Clicks (Combined)</div>
+      <div class="value">43,464</div>
+      <div class="sub">Search + Discover</div>
+    </div>
+    <div class="kpi-card highlight">
+      <div class="label">Total Impressions</div>
+      <div class="value">4.05M</div>
+      <div class="sub">Search + Discover</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Search Clicks</div>
       <div class="value">21,862</div>
       <div class="sub">Avg 1,151 / day</div>
     </div>
-    <div class="kpi-card highlight">
-      <div class="label">Impressions</div>
-      <div class="value">3.64M</div>
-      <div class="sub">Across 19 days</div>
-    </div>
-    <div class="kpi-card highlight">
-      <div class="label">Crisis Content Clicks</div>
-      <div class="value">17,613</div>
-      <div class="sub">80.5% of all clicks</div>
-    </div>
     <div class="kpi-card">
-      <div class="label">Crisis Content CTR</div>
-      <div class="value">1.45%</div>
-      <div class="sub">vs 0.17% for non-crisis</div>
+      <div class="label">Discover Clicks</div>
+      <div class="value">21,602</div>
+      <div class="sub">Peak: 7,852 on Mar 11</div>
+    </div>
+  </div>
+
+  <!-- Search vs Discover split -->
+  <h3 class="section-title">Google Search vs Google Discover</h3>
+  <div class="chart-row">
+    <div class="chart-card">
+      <h2>Clicks: Search vs Discover</h2>
+      <canvas id="sourceChart" height="200"></canvas>
+    </div>
+    <div class="chart-card">
+      <h2>Daily Clicks — Search vs Discover Stacked</h2>
+      <canvas id="dailyStackedChart" height="200"></canvas>
     </div>
   </div>
 
   <!-- Content category breakdown -->
-  <h3 class="section-title">Crisis Content by Category</h3>
+  <h3 class="section-title">Search Performance by Content Category</h3>
   <div class="cat-row">
     <div class="cat-card" style="border-color:#00b894;">
       <div class="cat-name">Airline Cancellation & Rebooking Guides</div>
-      <div class="cat-stat"><strong>89 pages</strong>Articles published</div>
-      <div class="cat-stat"><strong>10,555</strong>Clicks</div>
-      <div class="cat-stat"><strong>879,847</strong>Impressions</div>
+      <div class="cat-stat"><strong>89 pages</strong>In Search results</div>
+      <div class="cat-stat"><strong>10,555</strong>Search Clicks</div>
+      <div class="cat-stat"><strong>879,847</strong>Search Impressions</div>
     </div>
     <div class="cat-card" style="border-color:#0984e3;">
       <div class="cat-name">Airport Status ("Is X Airport Open?")</div>
-      <div class="cat-stat"><strong>36 pages</strong>Articles published</div>
-      <div class="cat-stat"><strong>5,296</strong>Clicks</div>
-      <div class="cat-stat"><strong>197,626</strong>Impressions</div>
+      <div class="cat-stat"><strong>36 pages</strong>In Search results</div>
+      <div class="cat-stat"><strong>5,296</strong>Search Clicks</div>
+      <div class="cat-stat"><strong>197,626</strong>Search Impressions</div>
     </div>
     <div class="cat-card" style="border-color:#6c5ce7;">
       <div class="cat-name">Airspace Closure & Country Guides</div>
-      <div class="cat-stat"><strong>14 pages</strong>Articles published</div>
-      <div class="cat-stat"><strong>901</strong>Clicks</div>
-      <div class="cat-stat"><strong>84,915</strong>Impressions</div>
+      <div class="cat-stat"><strong>14 pages</strong>In Search results</div>
+      <div class="cat-stat"><strong>901</strong>Search Clicks</div>
+      <div class="cat-stat"><strong>84,915</strong>Search Impressions</div>
     </div>
     <div class="cat-card" style="border-color:#e17055;">
-      <div class="cat-name">Other Crisis Content (Alt Routes, Live Blog)</div>
-      <div class="cat-stat"><strong>19 pages</strong>Articles published</div>
-      <div class="cat-stat"><strong>861</strong>Clicks</div>
-      <div class="cat-stat"><strong>55,086</strong>Impressions</div>
+      <div class="cat-name">Other Crisis Content</div>
+      <div class="cat-stat"><strong>19 pages</strong>In Search results</div>
+      <div class="cat-stat"><strong>861</strong>Search Clicks</div>
+      <div class="cat-stat"><strong>55,086</strong>Search Impressions</div>
     </div>
   </div>
 
-  <!-- Category breakdown chart + Crisis vs Non-Crisis -->
-  <div class="chart-row">
-    <div class="chart-card">
-      <h2>Clicks by Content Category</h2>
-      <canvas id="categoryChart" height="200"></canvas>
-    </div>
-    <div class="chart-card">
-      <h2>Crisis vs Non-Crisis Content</h2>
-      <canvas id="crisisSplitChart" height="200"></canvas>
-    </div>
-  </div>
-
-  <!-- Daily trend chart -->
-  <h3 class="section-title">Daily Performance Trend</h3>
+  <!-- Daily trend chart (Search only) -->
+  <h3 class="section-title">Daily Performance — Google Search</h3>
   <div class="chart-row">
     <div class="chart-card full">
-      <h2>Daily Clicks & Impressions (Mar 1–19)</h2>
+      <h2>Daily Search Clicks & Impressions (Mar 1–19)</h2>
       <canvas id="dailyChart" height="75"></canvas>
     </div>
   </div>
 
-  <!-- Top pages bar + Country -->
+  <!-- Top pages + Country -->
   <h3 class="section-title">Top Performing Content & Audience</h3>
   <div class="chart-row">
     <div class="chart-card">
-      <h2>Top 10 Pages by Clicks</h2>
-      <canvas id="pagesChart" height="220"></canvas>
+      <h2>Top 10 Pages by Combined Clicks</h2>
+      <canvas id="pagesChart" height="240"></canvas>
     </div>
     <div class="chart-card">
-      <h2>Clicks by Country (Top 10)</h2>
-      <canvas id="countryChart" height="220"></canvas>
+      <h2>Clicks by Country — Search (Top 10)</h2>
+      <canvas id="countryChart" height="240"></canvas>
     </div>
   </div>
 
@@ -180,27 +179,40 @@
       <canvas id="queriesChart" height="220"></canvas>
     </div>
     <div class="chart-card">
-      <h2>Device Breakdown</h2>
+      <h2>Device Breakdown (Search)</h2>
       <canvas id="deviceChart" height="220"></canvas>
     </div>
   </div>
 
-  <!-- Top pages table -->
-  <h3 class="section-title">Top 20 Pages — Detailed Breakdown</h3>
+  <!-- Top pages table — combined -->
+  <h3 class="section-title">Top 15 Pages — Combined Search + Discover</h3>
   <div class="chart-card full" style="margin-bottom:24px;">
     <div class="table-wrap">
       <table id="pagesTable">
         <thead>
-          <tr><th>#</th><th>Page</th><th>Type</th><th>Clicks</th><th>Impressions</th><th>CTR</th><th>Avg Position</th></tr>
+          <tr><th>#</th><th>Page</th><th>Type</th><th>Search Clicks</th><th>Discover Clicks</th><th>Total Clicks</th><th>Total Impressions</th></tr>
         </thead>
         <tbody></tbody>
       </table>
     </div>
   </div>
 
+  <!-- Discover detail -->
+  <h3 class="section-title">Google Discover — Top Pages</h3>
+  <div class="chart-row">
+    <div class="chart-card">
+      <h2>Top Discover Pages by Clicks</h2>
+      <canvas id="discoverPagesChart" height="200"></canvas>
+    </div>
+    <div class="chart-card">
+      <h2>Discover Traffic by Country</h2>
+      <canvas id="discoverCountryChart" height="200"></canvas>
+    </div>
+  </div>
+
 </div>
 
-<div class="footer">Data source: Google Search Console &nbsp;|&nbsp; Period: 1–19 Mar 2026 &nbsp;|&nbsp; Generated 20 Mar 2026</div>
+<div class="footer">Data source: Google Search Console (Search + Discover) &nbsp;|&nbsp; Period: 1–19 Mar 2026 &nbsp;|&nbsp; Generated 20 Mar 2026</div>
 
 <script>
 const green = '#00b894';
@@ -209,45 +221,48 @@ const teal = '#00897b';
 const orange = '#f39c12';
 const orangeLight = 'rgba(243,156,18,0.15)';
 const blue = '#0984e3';
+const blueLight = 'rgba(9,132,227,0.15)';
 const purple = '#6c5ce7';
 const coral = '#e17055';
 
-// ─── Category Breakdown (doughnut) ───
-new Chart(document.getElementById('categoryChart'), {
+// ─── Search vs Discover split ───
+new Chart(document.getElementById('sourceChart'), {
   type: 'doughnut',
   data: {
-    labels: ['Airline Cancellation Guides','Airport Status Pages','Airspace / Country Guides','Other Crisis Content'],
-    datasets: [{ data: [10555,5296,901,861], backgroundColor: [green,blue,purple,coral], borderWidth: 2, borderColor: '#fff' }]
+    labels: ['Google Search (21,862)','Google Discover (21,602)'],
+    datasets: [{ data: [21862,21602], backgroundColor: [green,blue], borderWidth: 2, borderColor: '#fff' }]
   },
   options: {
     responsive: true,
     plugins: {
-      legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 12 } },
+      legend: { position: 'bottom', labels: { font: { size: 12 }, padding: 14 } },
       tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.parsed.toLocaleString()} clicks` } }
     }
   }
 });
 
-// ─── Crisis vs Non-Crisis ───
-new Chart(document.getElementById('crisisSplitChart'), {
+// ─── Daily Stacked (Search + Discover) ───
+const dailyLabels = ['Mar 1','Mar 2','Mar 3','Mar 4','Mar 5','Mar 6','Mar 7','Mar 8','Mar 9','Mar 10','Mar 11','Mar 12','Mar 13','Mar 14','Mar 15','Mar 16','Mar 17','Mar 18','Mar 19'];
+const searchDaily = [151,186,218,463,468,1893,686,597,4744,2251,1976,1246,1348,1022,646,796,1904,982,285];
+const discoverDaily = [0,0,0,5,6,0,103,35,15,2283,7852,2421,617,558,140,29,175,3650,3713];
+
+new Chart(document.getElementById('dailyStackedChart'), {
   type: 'bar',
   data: {
-    labels: ['Clicks','Impressions (÷1000)'],
+    labels: dailyLabels,
     datasets: [
-      { label: 'Crisis Content', data: [17613, 1217], backgroundColor: green, borderRadius: 4 },
-      { label: 'Non-Crisis Content', data: [4271, 2511], backgroundColor: '#dfe6e9', borderRadius: 4 }
+      { label: 'Search', data: searchDaily, backgroundColor: green, borderRadius: 2 },
+      { label: 'Discover', data: discoverDaily, backgroundColor: blue, borderRadius: 2 }
     ]
   },
   options: {
     responsive: true,
-    plugins: { legend: { position: 'bottom' } },
-    scales: { x: { grid: { display: false } }, y: { grid: { color: '#f0f0f0' } } }
+    plugins: { legend: { position: 'top' } },
+    scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, grid: { color: '#f0f0f0' } } }
   }
 });
 
-// ─── Daily Trend ───
-const dailyLabels = ['Mar 1','Mar 2','Mar 3','Mar 4','Mar 5','Mar 6','Mar 7','Mar 8','Mar 9','Mar 10','Mar 11','Mar 12','Mar 13','Mar 14','Mar 15','Mar 16','Mar 17','Mar 18','Mar 19'];
-const dailyClicks = [151,186,218,463,468,1893,686,597,4744,2251,1976,1246,1348,1022,646,796,1904,982,285];
+// ─── Daily Search Trend ───
 const dailyImpressions = [101241,112380,127011,150304,141012,186717,185710,178008,426291,289615,210902,207916,203157,153947,131333,143684,249656,294512,143996];
 
 new Chart(document.getElementById('dailyChart'), {
@@ -255,7 +270,7 @@ new Chart(document.getElementById('dailyChart'), {
   data: {
     labels: dailyLabels,
     datasets: [
-      { label: 'Clicks', data: dailyClicks, borderColor: green, backgroundColor: greenLight, fill: true, tension: 0.3, yAxisID: 'y', pointRadius: 4, pointBackgroundColor: green, borderWidth: 2.5 },
+      { label: 'Clicks', data: searchDaily, borderColor: green, backgroundColor: greenLight, fill: true, tension: 0.3, yAxisID: 'y', pointRadius: 4, pointBackgroundColor: green, borderWidth: 2.5 },
       { label: 'Impressions', data: dailyImpressions, borderColor: orange, backgroundColor: orangeLight, fill: true, tension: 0.3, yAxisID: 'y1', pointRadius: 3, pointBackgroundColor: orange, borderWidth: 2, borderDash: [5,3] }
     ]
   },
@@ -270,30 +285,40 @@ new Chart(document.getElementById('dailyChart'), {
   }
 });
 
-// ─── Top 10 Pages (horizontal bar) ───
-const pageLabels = [
-  'Kuwait Airways Cancellation','Doha Airport Open','Kuwait Airspace Closed',
-  'Qatar Airways Cancellation','Abu Dhabi Airport Open','Qatar Airspace Closure',
-  'Europe–Asia Without ME Transit','Iftar Time Dhaka',
-  'Turkiye Airspace / Istanbul','Etihad Airways Cancellation'
+// ─── Top 10 Pages Combined (horizontal bar, stacked) ───
+const combinedPageLabels = [
+  'Kuwait Airways Cancellation',
+  'Dammam Airport Open',
+  'Doha Airport Open',
+  'Kuwait Airspace Closed',
+  'Qatar Airways Cancellation',
+  'Abu Dhabi Airport Open',
+  'Qatar Airspace Closure',
+  'Riyadh Airport Open',
+  'Europe–Asia Without ME Transit',
+  'Iftar Time Dhaka'
 ];
-const pageClicks = [2182,2060,1682,1442,1392,874,608,513,505,463];
+const combinedPageSearch =  [2182, 0,   2060, 1682, 1442, 1392, 874,  0,   608, 513];
+const combinedPageDiscover= [13132,6495, 723,  128,   1,    0,    8, 552,    0,   0];
 
 new Chart(document.getElementById('pagesChart'), {
   type: 'bar',
   data: {
-    labels: pageLabels,
-    datasets: [{ label: 'Clicks', data: pageClicks, backgroundColor: green, borderRadius: 4, barThickness: 18 }]
+    labels: combinedPageLabels,
+    datasets: [
+      { label: 'Search', data: combinedPageSearch, backgroundColor: green, borderRadius: 2, barThickness: 16 },
+      { label: 'Discover', data: combinedPageDiscover, backgroundColor: blue, borderRadius: 2, barThickness: 16 }
+    ]
   },
   options: {
     indexAxis: 'y',
     responsive: true,
-    plugins: { legend: { display: false } },
-    scales: { x: { grid: { color: '#f0f0f0' } }, y: { ticks: { font: { size: 11 } } } }
+    plugins: { legend: { position: 'top' } },
+    scales: { x: { stacked: true, grid: { color: '#f0f0f0' } }, y: { stacked: true, ticks: { font: { size: 11 } } } }
   }
 });
 
-// ─── Country doughnut ───
+// ─── Country doughnut (Search) ───
 const countryLabels = ['UK','India','Kuwait','Pakistan','US','Saudi Arabia','UAE','Bangladesh','Canada','Australia'];
 const countryClicks = [3622,2874,2522,1788,1481,1471,1095,753,433,418];
 const palette = [green,'#00cec9',blue,purple,'#fdcb6e',coral,'#d63031','#e84393','#636e72','#2d3436'];
@@ -313,7 +338,7 @@ new Chart(document.getElementById('countryChart'), {
   }
 });
 
-// ─── Top queries (horizontal bar) ───
+// ─── Top queries ───
 const qLabels = ['kuwait airways suspended flights','doha airport','is doha airport open','qatar airways','abu dhabi airport','air arabia','iftar time dhaka','kuwait airways','istanbul airport','is abu dhabi airport open'];
 const qClicks = [1280,1004,642,593,496,306,288,242,236,220];
 
@@ -331,7 +356,7 @@ new Chart(document.getElementById('queriesChart'), {
   }
 });
 
-// ─── Device pie ───
+// ─── Device pie (Search) ───
 new Chart(document.getElementById('deviceChart'), {
   type: 'doughnut',
   data: {
@@ -341,46 +366,71 @@ new Chart(document.getElementById('deviceChart'), {
   options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
 });
 
-// ─── Top 20 pages table ───
+// ─── Combined pages table ───
 const pages = [
-  {name:'Kuwait Airways Flight Cancellation & Rebooking Guide',type:'Airline',clicks:2182,imp:51982,ctr:'4.20%',pos:6.3},
-  {name:'Is Doha Airport Open? Live Status & Travel Updates',type:'Airport',clicks:2060,imp:35788,ctr:'5.76%',pos:4.2},
-  {name:'Kuwait Airspace Closed — Airport Status & Cancellations',type:'Airspace',clicks:1682,imp:79627,ctr:'2.11%',pos:6.4},
-  {name:'Qatar Airways Flight Cancellation Guide 2026',type:'Airline',clicks:1442,imp:67969,ctr:'2.12%',pos:4.0},
-  {name:'Is Abu Dhabi Airport Open? Live Status & Travel Updates',type:'Airport',clicks:1392,imp:33777,ctr:'4.12%',pos:3.2},
-  {name:'Qatar Airspace Closure — Doha Airport & QR Cancellations',type:'Airspace',clicks:874,imp:30970,ctr:'2.82%',pos:2.9},
-  {name:'How to Fly Europe-Asia Without Transiting the Middle East',type:'Alt Route',clicks:608,imp:30983,ctr:'1.96%',pos:7.9},
-  {name:'Iftar Time Dhaka',type:'Other',clicks:513,imp:289853,ctr:'0.18%',pos:6.9},
-  {name:"Turkiye's Airspace — Istanbul Airport Flight Updates",type:'Airspace',clicks:505,imp:39275,ctr:'1.29%',pos:6.2},
-  {name:'Etihad Airways Flight Cancellation & Rebooking Guide',type:'Airline',clicks:463,imp:32213,ctr:'1.44%',pos:3.7},
-  {name:'Air Arabia Flight Cancellation & Rebooking Guide',type:'Airline',clicks:450,imp:61248,ctr:'0.73%',pos:3.9},
-  {name:'Jordan Airspace Nightly Closure — Amman Airport & RJ',type:'Airspace',clicks:394,imp:32655,ctr:'1.21%',pos:6.4},
-  {name:'Is Istanbul Airport Open? Flight Status & Travel Updates',type:'Airport',clicks:393,imp:28184,ctr:'1.39%',pos:5.0},
-  {name:'Iftar Times in Islamabad',type:'Other',clicks:374,imp:276608,ctr:'0.14%',pos:7.8},
-  {name:'Is Dubai Airport Open? Live Status & Travel Updates',type:'Airport',clicks:366,imp:8551,ctr:'4.28%',pos:3.6},
-  {name:'Cyprus Airspace — Larnaca & Paphos Airport Status',type:'Airspace',clicks:350,imp:28740,ctr:'1.22%',pos:5.1},
-  {name:'Saudi Airlines Flight Cancellation Guide 2026',type:'Airline',clicks:345,imp:36652,ctr:'0.94%',pos:3.8},
-  {name:'Bahrain Airspace — Is It Safe to Fly? Airport Status',type:'Airspace',clicks:274,imp:18596,ctr:'1.47%',pos:6.3},
-  {name:'Emirates Flight Cancellation Guide 2026',type:'Airline',clicks:273,imp:18769,ctr:'1.45%',pos:4.1},
-  {name:'Iraq Airspace Closed — Baghdad, Erbil, Basra Status',type:'Airspace',clicks:264,imp:22638,ctr:'1.17%',pos:7.8}
+  {name:'Kuwait Airways Flight Cancellation & Rebooking Guide',type:'Airline',search:2182,discover:13132,imp:281877},
+  {name:'Is Dammam Airport Open? Live Status & Travel Updates',type:'Airport',search:0,discover:6495,imp:128021},
+  {name:'Is Doha Airport Open? Live Status & Travel Updates',type:'Airport',search:2060,discover:723,imp:53976},
+  {name:'Kuwait Airspace Closed — Airport Status & Cancellations',type:'Airspace',search:1682,discover:128,imp:81439},
+  {name:'Qatar Airways Flight Cancellation Guide 2026',type:'Airline',search:1442,discover:1,imp:68211},
+  {name:'Is Abu Dhabi Airport Open? Live Status & Travel Updates',type:'Airport',search:1392,discover:0,imp:33777},
+  {name:'Is Riyadh Airport Open? Live Status & Travel Updates',type:'Airport',search:0,discover:552,imp:13259},
+  {name:'Qatar Airspace Closure — Doha Airport & QR Cancellations',type:'Airspace',search:874,discover:8,imp:31101},
+  {name:'How to Fly Europe-Asia Without Transiting the Middle East',type:'Alt Route',search:608,discover:0,imp:30983},
+  {name:'Iftar Time Dhaka',type:'Other',search:513,discover:0,imp:289853},
+  {name:"Turkiye's Airspace — Istanbul Airport Flight Updates",type:'Airspace',search:505,discover:0,imp:39275},
+  {name:'Etihad Airways Flight Cancellation & Rebooking Guide',type:'Airline',search:463,discover:0,imp:32213},
+  {name:'Air Arabia Flight Cancellation & Rebooking Guide',type:'Airline',search:450,discover:0,imp:61248},
+  {name:'Is Jeddah Airport Open? Live Status & Travel Updates',type:'Airport',search:0,discover:345,imp:15085},
+  {name:'Jordan Airspace Nightly Closure — Amman Airport & RJ',type:'Airspace',search:394,discover:2,imp:32714}
 ];
 
-const typeColors = { Airline: '#00b894', Airport: '#0984e3', Airspace: '#6c5ce7', 'Alt Route': '#e17055', Other: '#636e72' };
-const maxClicks = pages[0].clicks;
+const maxC = pages[0].search + pages[0].discover;
 const tbody = document.querySelector('#pagesTable tbody');
 pages.forEach((p, i) => {
-  const posClass = p.pos <= 3 ? 'pos-good' : p.pos <= 6 ? 'pos-mid' : 'pos-low';
-  const barW = Math.round((p.clicks / maxClicks) * 100);
-  const tc = typeColors[p.type] || '#636e72';
+  const total = p.search + p.discover;
+  const barW = Math.round((total / maxC) * 120);
+  const tc = {Airline:'#00b894',Airport:'#0984e3',Airspace:'#6c5ce7','Alt Route':'#e17055',Other:'#636e72'}[p.type]||'#636e72';
   tbody.innerHTML += `<tr>
     <td class="rank">${i+1}</td>
     <td class="page-name">${p.name}</td>
     <td><span class="tag" style="background:${tc}20;color:${tc}">${p.type}</span></td>
-    <td>${p.clicks.toLocaleString()} <span class="clicks-bar" style="width:${barW}px"></span></td>
+    <td>${p.search.toLocaleString()}</td>
+    <td>${p.discover.toLocaleString()}</td>
+    <td><strong>${total.toLocaleString()}</strong> <span class="clicks-bar" style="width:${barW}px"></span></td>
     <td>${p.imp.toLocaleString()}</td>
-    <td class="ctr-val">${p.ctr}</td>
-    <td><span class="pos-badge ${posClass}">${p.pos}</span></td>
   </tr>`;
+});
+
+// ─── Discover top pages ───
+new Chart(document.getElementById('discoverPagesChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Kuwait Airways Cancellation','Dammam Airport Open','Doha Airport Open','Riyadh Airport Open','Jeddah Airport Open','Kuwait Airspace Closed'],
+    datasets: [{ label: 'Discover Clicks', data: [13132,6495,723,552,345,128], backgroundColor: blue, borderRadius: 4, barThickness: 18 }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: { x: { grid: { color: '#f0f0f0' } }, y: { ticks: { font: { size: 11 } } } }
+  }
+});
+
+// ─── Discover country ───
+new Chart(document.getElementById('discoverCountryChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Kuwait','Saudi Arabia','Qatar','India','Pakistan','Bangladesh','Nepal','Philippines','UK','UAE'],
+    datasets: [{ data: [11620,7946,737,477,220,87,73,71,56,24], backgroundColor: [blue,purple,green,coral,'#fdcb6e','#d63031','#00cec9','#e84393','#636e72','#2d3436'], borderWidth: 2, borderColor: '#fff' }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'right', labels: { font: { size: 11 }, padding: 10 } },
+      tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.parsed.toLocaleString()} clicks` } }
+    }
+  }
 });
 </script>
 
